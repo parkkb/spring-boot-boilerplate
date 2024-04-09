@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,5 +19,15 @@ public class UserService {
 
 	public Optional<User> findByUserId(String userId){
 		return userRepository.findByUserId(userId);
+	}
+
+	@Transactional
+	public void updateToken(String token, Long id){
+		Optional<User> user = userRepository.findById(id);
+		user.ifPresent(value -> value.setToken(token));
+	}
+
+	public User findById(long l) {
+		return userRepository.findById(l).orElse(null);
 	}
 }
