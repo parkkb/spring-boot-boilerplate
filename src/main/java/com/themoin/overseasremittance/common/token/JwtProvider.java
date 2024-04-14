@@ -1,33 +1,21 @@
 package com.themoin.overseasremittance.common.token;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.themoin.overseasremittance.infrastructure.user.User;
 import com.themoin.overseasremittance.infrastructure.user.UserService;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecurityException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -39,55 +27,44 @@ public class JwtProvider{
 	private final UserService userService;
 
 
-	@Value("${security.jwt.key}")
-	private String secretKey;
-	@Value("${security.jwt.expirationMs}")
-	private long jwtExpirationMs;
-	private Key key;
 
-	private SecretKey getSecretKey(){
-		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+	private static String secretKey;
+	@Value("${security.jwt.key}")
+	private static final String SECRET_KEY = "";
+
+	private static SecretKey getSigningKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public String createJwtToken(String userId){
+	public static String generateToken(String username) {
+		long nowMillis = System.currentTimeMillis();
+		Date now = new Date(nowMillis);
+		long expMillis = nowMillis + 3600000; // 토큰의 유효 기간은 1시간으로 설정
+		Date exp = new Date(expMillis);
+
 		return Jwts.builder()
-				.subject(userId)
-				.issuedAt(new Date())
-				.expiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(getSecretKey())
+				.subject(username)
+				.issuedAt(now)
+				.expiration(exp)
+				.signWith(getSigningKey())
 				.compact();
 	}
 
-	public Authentication getAuthentication(String token) {
-		Claims claims = Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(token).getPayload();
-
-		Collection<? extends GrantedAuthority> authorities =
-				Arrays.stream(claims.get("auth").toString().split(","))
-						.filter(auth -> auth != null && !auth.trim().isEmpty()) // 빈 문자열이나 null 값 제거
-						.map(SimpleGrantedAuthority::new)
-						.collect(Collectors.toList());
-
-		User user = userService.findById(Long.parseLong(String.valueOf(claims.get(UID))));
-		UserDetails principal = new PrincipalDetails(user);
-
-		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+	public static Claims parseToken(String jwt) {
+		return Jwts.parser()
+				.verifyWith(getSigningKey())
+				.build()
+				.parseSignedClaims(jwt)
+				.getPayload();
 	}
 
-	public boolean validateToken(String token) {
+	public static boolean validateToken(Claims claims) {
 		try {
-			Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
-		} catch (SecurityException | MalformedJwtException e) {
-			logger.info("잘못된 JWT 서명입니다.");
-		} catch (ExpiredJwtException e) {
-			logger.info("만료된 JWT 토큰입니다.");
-		} catch (UnsupportedJwtException e) {
-			logger.info("지원되지 않는 JWT 토큰입니다.");
-		} catch (IllegalArgumentException e) {
-			logger.info("JWT 토큰이 잘못되었습니다.");
+			return !claims.getExpiration().before(new Date());
+		} catch (Exception ex) {
+			return false;
 		}
-		return false;
 	}
 
 }

@@ -32,7 +32,7 @@ public class LogInService {
 			throw new CustomException(CustomErrorCode.NO_EXIST_USER);
 		}
 
-		var token = jwtProvider.createJwtToken(loginDto.userId());
+		var token = JwtProvider.generateToken(loginDto.userId());
 
 		checkPassword(loginDto.password(), myUser.get().getPassword());
 

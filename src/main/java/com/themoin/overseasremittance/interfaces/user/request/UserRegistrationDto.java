@@ -1,6 +1,9 @@
 package com.themoin.overseasremittance.interfaces.user.request;
 
 
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.encrypt.Encryptors;
+
 import com.themoin.overseasremittance.interfaces.user.enums.IdType;
 
 import jakarta.validation.constraints.Email;
@@ -8,7 +11,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 
-public record UserDto(
+public record UserRegistrationDto(
 		@NotEmpty(message = "이메일 입력은 필수 입니다.")
 		@Email
 		String userId,
@@ -20,4 +23,10 @@ public record UserDto(
 		String name,
 		IdType idType,
 		String idValue
-) {}
+) {
+
+	public String getEncryptedIdValue(String salt) {
+		TextEncryptor encryptor = Encryptors.text("password", salt);
+		return encryptor.encrypt(this.idValue);
+	}
+}

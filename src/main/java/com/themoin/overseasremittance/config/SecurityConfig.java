@@ -16,15 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.themoin.overseasremittance.common.filter.JwtAuthFilter;
-import com.themoin.overseasremittance.infrastructure.user.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-	private final UserService userService;
-
-	public SecurityConfig(UserService userService) {this.userService = userService;}
 
 	@Bean
 	public JwtAuthFilter jwtAuthFilter() {
@@ -44,8 +39,8 @@ public class SecurityConfig {
 								.requestMatchers(PathRequest.toH2Console()).permitAll()
 								.anyRequest().authenticated()
 						)
-				.csrf(AbstractHttpConfigurer::disable)
-				.addFilter(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+				.csrf(AbstractHttpConfigurer::disable);
 
 
 		return http.build();

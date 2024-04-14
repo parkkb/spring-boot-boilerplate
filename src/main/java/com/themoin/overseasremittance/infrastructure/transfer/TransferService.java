@@ -7,4 +7,9 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TransferService {
+
+	private final ForexClient forexClient;
+
+
+
 }

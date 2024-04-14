@@ -1,40 +1,46 @@
 package com.themoin.overseasremittance.common.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.themoin.overseasremittance.common.token.JwtProvider;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class JwtAuthFilter extends GenericFilterBean {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private final JwtProvider jwtProvider;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-						 FilterChain chain) throws IOException, ServletException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
 
-		String token = resolveToken((HttpServletRequest) request);
-		if (token != null && jwtProvider.validateToken(token)) {
-			//String email = jwtProvider.getEmail(token);
+		final String authorizationHeader = request.getHeader("Authorization");
 
-			Authentication auth = new UsernamePasswordAuthenticationToken("", "", Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
-			SecurityContextHolder.getContext().setAuthentication(auth);
+		String username = null;
+		String jwt = null;
+
+		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			jwt = authorizationHeader.substring(7);
+			username = JwtProvider.parseToken(jwt).getSubject();
+		}
+
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			Claims claims = JwtProvider.parseToken(jwt);
+			if (JwtProvider.validateToken(claims)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+						new UsernamePasswordAuthenticationToken(username, null, null); // 권한은 필요에 따라 설정 가능
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+			}
 		}
 		chain.doFilter(request, response);
 	}

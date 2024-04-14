@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.themoin.overseasremittance.common.response.ResultVo;
 import com.themoin.overseasremittance.domain.user.SignUpService;
-import com.themoin.overseasremittance.interfaces.user.request.UserDto;
+import com.themoin.overseasremittance.interfaces.user.request.UserRegistrationDto;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class SignUpController {
 	private final SignUpService signUpService;
 
 	@PostMapping("/user/signup")
-	public ResultVo signUp(@Valid @RequestBody UserDto userDto){
-		return signUpService.signUp(userDto);
+	public ResultVo signUp(@Valid @RequestBody UserRegistrationDto userRegistrationDto){
+		return signUpService.signUp(userRegistrationDto);
 	}
 }
