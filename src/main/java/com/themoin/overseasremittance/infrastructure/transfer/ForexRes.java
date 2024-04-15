@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class ForexRes {
 
 	private String code;
+	private String currencyCode;
 	private double basePrice;
 	private int currencyUnit;
 }

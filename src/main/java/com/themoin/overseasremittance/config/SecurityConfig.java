@@ -30,16 +30,14 @@ public class SecurityConfig {
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception{
 
 		http
-				.httpBasic(withDefaults())
-				.formLogin(withDefaults())
 				.authorizeHttpRequests((authorizeRequests)->
 						authorizeRequests
 								.requestMatchers("/user/signup").permitAll()
 								.requestMatchers("/user/login").permitAll()
-								.requestMatchers(PathRequest.toH2Console()).permitAll()
+								.requestMatchers("/h2-console/**").permitAll()
 								.anyRequest().authenticated()
 						)
-				.addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
 				.csrf(AbstractHttpConfigurer::disable);
 
 

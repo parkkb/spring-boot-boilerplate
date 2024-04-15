@@ -21,4 +21,5 @@ public class SignUpController {
 	public ResultVo signUp(@Valid @RequestBody UserRegistrationDto userRegistrationDto){
 		return signUpService.signUp(userRegistrationDto);
 	}
+
 }

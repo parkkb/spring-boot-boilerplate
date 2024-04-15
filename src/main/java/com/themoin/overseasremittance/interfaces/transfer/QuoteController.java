@@ -1,9 +1,12 @@
 package com.themoin.overseasremittance.interfaces.transfer;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.themoin.overseasremittance.domain.transfer.QuoteService;
-import com.themoin.overseasremittance.infrastructure.transfer.TransferService;
+import com.themoin.overseasremittance.domain.transfer.TransferQuoteService;
+import com.themoin.overseasremittance.interfaces.transfer.request.QuoteDto;
+import com.themoin.overseasremittance.interfaces.transfer.response.TransferQuoteVo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,16 +14,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QuoteController {
 
-	private final QuoteService quoteService;
-	private final TransferService transferService;
+	private final TransferQuoteService transferQuoteService;
 
-	//@GetMapping("/transfer/quote")
-	/*public Mono<ResponseEntity<TransferQuoteVo>> getTransferQuote(@RequestBody TransferQuoteDto request) {
-		return transferService.getExchangeRate("KRW", request.targetCurrency())
-				.map(rate -> quoteService.calculateQuote(request.targetCurrency(), request.amount(), rate))
-				.map(ResponseEntity::ok)
-				.defaultIfEmpty(ResponseEntity.badRequest().build());
-	}*/
+	@GetMapping("/transfer/quote")
+	public TransferQuoteVo getTransferQuote(@RequestBody QuoteDto quoteDto) {
+		return transferQuoteService.createQuote(quoteDto);
+	}
 
 
 }

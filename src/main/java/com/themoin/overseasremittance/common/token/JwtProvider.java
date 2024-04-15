@@ -1,19 +1,15 @@
 package com.themoin.overseasremittance.common.token;
 
-import java.security.Key;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.themoin.overseasremittance.infrastructure.user.UserService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -22,25 +18,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtProvider{
 
-	private static final Logger logger = Logger.getLogger(JwtProvider.class.getName());
-
-	private final UserService userService;
-
-
-
 	private static String secretKey;
+	private static long expirationMs;
+
 	@Value("${security.jwt.key}")
-	private static final String SECRET_KEY = "";
+	public void setSecretKey(String secretKey){
+		JwtProvider.secretKey = secretKey;
+	}
+
+	@Value("${security.jwt.expirationMs}")
+	public void setExpirationMs(long expirationMs){
+		JwtProvider.expirationMs = expirationMs;
+	}
 
 	private static SecretKey getSigningKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
 	public static String generateToken(String username) {
 		long nowMillis = System.currentTimeMillis();
 		Date now = new Date(nowMillis);
-		long expMillis = nowMillis + 3600000; // 토큰의 유효 기간은 1시간으로 설정
+		long expMillis = nowMillis + expirationMs; // 토큰의 유효 기간은 1시간으로 설정
 		Date exp = new Date(expMillis);
 
 		return Jwts.builder()
