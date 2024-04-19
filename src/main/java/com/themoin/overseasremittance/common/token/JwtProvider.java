@@ -59,9 +59,9 @@ public class JwtProvider{
 				.getPayload();
 	}
 
-	public static boolean validateToken(Claims claims) {
+	public static boolean validateToken(String token) {
 		try {
-			return !claims.getExpiration().before(new Date());
+			return !parseToken(token).getExpiration().before(new Date());
 		} catch (Exception ex) {
 			return false;
 		}

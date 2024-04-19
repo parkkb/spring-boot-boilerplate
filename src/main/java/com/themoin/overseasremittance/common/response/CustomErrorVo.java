@@ -29,4 +29,11 @@ public class CustomErrorVo {
 						.message(e.getMessage())
 						.build());
 	}
+
+	public static CustomErrorVo toResponse(CustomErrorCode e){
+		return CustomErrorVo.builder()
+				.code(e.getCode())
+				.message(e.getMessage())
+				.build();
+	}
 }
