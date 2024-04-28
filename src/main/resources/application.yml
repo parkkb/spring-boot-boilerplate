@@ -1,6 +1,6 @@
 spring:
   application:
-    name: overseas-remittance
+    name: spring-boot-boilerplate
 
   h2:
     console:
