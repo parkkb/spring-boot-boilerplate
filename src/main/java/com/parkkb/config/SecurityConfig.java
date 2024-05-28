@@ -25,7 +25,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
+	public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
 		return new JwtAuthenticationEntryPoint(jwtAuthFilter());
 	}
 
@@ -50,11 +50,9 @@ public class SecurityConfig {
 
 	}
 
-
 	@Bean
-	public PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 
 }

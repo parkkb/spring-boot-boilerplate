@@ -21,5 +21,4 @@ public class QuoteController {
 		return transferQuoteService.createQuote(quoteDto);
 	}
 
-
 }

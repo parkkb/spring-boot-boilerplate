@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
@@ -37,8 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			jwt = authorizationHeader.substring(7);
 		}
 
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-			//Claims claims = JwtProvider.parseToken(jwt);
+		if (isNotAuthentication()) {
 			if (JwtProvider.validateToken(jwt)) {
 				username = JwtProvider.parseToken(jwt).getSubject();
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -49,6 +47,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		chain.doFilter(request, response);
 
+	}
+
+	private static boolean isNotAuthentication() {
+		return SecurityContextHolder.getContext().getAuthentication() == null;
 	}
 
 	private String resolveToken(HttpServletRequest request) {
@@ -67,7 +69,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		ObjectMapper mapper = new ObjectMapper();
 		response.setContentType("application/json; charset=utf-8");
 
-		response.getWriter().write(Objects.requireNonNull(mapper.writeValueAsString(CustomErrorVo.toResponse(errorCode))));
+		response.getWriter()
+				.write(Objects.requireNonNull(mapper.writeValueAsString(CustomErrorVo.toResponse(errorCode))));
 	}
 
 }

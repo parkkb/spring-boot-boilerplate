@@ -1,17 +1,13 @@
 package com.parkkb.interfaces.user;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,10 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.parkkb.domain.user.LogInService;
-import com.parkkb.infrastructure.user.User;
 import com.parkkb.infrastructure.user.UserService;
 import com.parkkb.interfaces.user.request.LoginDto;
 import com.parkkb.interfaces.user.response.LoginResultVo;
@@ -47,8 +41,8 @@ class LoginControllerTest {
 
 		LoginDto loginDto = new LoginDto("abc@gmail.com", "dsfjsdf");
 		given(logInService.login(loginDto)).willReturn(LoginResultVo.builder()
-						.resultCode(200)
-						.resultMsg("Success")
+				.resultCode(200)
+				.resultMsg("Success")
 				.build());
 	}
 
@@ -67,5 +61,4 @@ class LoginControllerTest {
 
 	}
 
-  
 }

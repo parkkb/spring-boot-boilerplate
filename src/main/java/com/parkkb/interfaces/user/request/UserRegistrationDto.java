@@ -1,15 +1,13 @@
 package com.parkkb.interfaces.user.request;
 
-
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 import com.parkkb.interfaces.user.enums.IdType;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-
 
 public record UserRegistrationDto(
 		@NotEmpty(message = "이메일 입력은 필수 입니다.")

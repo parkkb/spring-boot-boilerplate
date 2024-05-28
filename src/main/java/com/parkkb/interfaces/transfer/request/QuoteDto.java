@@ -8,6 +8,5 @@ public record QuoteDto(
 
 		@NotEmpty(message = "환율정보 입력은 필수 입니다.")
 		String targetCurrency
-)
-{
+) {
 }

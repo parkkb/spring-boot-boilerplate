@@ -1,8 +1,8 @@
 package com.parkkb.domain.user;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,15 +23,14 @@ public class SignUpService {
 	private final UserMapper userMapper;
 	private final EncryptionContext encryptionContext;
 
-	public ResultVo signUp(UserRegistrationDto userRegistrationDto){
-		if(ObjectUtils.isEmpty(userService.findByUserId(userRegistrationDto.userId()))){
+	public ResultVo signUp(UserRegistrationDto userRegistrationDto) {
+		if (ObjectUtils.isEmpty(userService.findByUserId(userRegistrationDto.userId()))) {
 			userService.save(userMapper.toEntity(userRegistrationDto, encryptionContext));
 			return ResultVo.builder()
 					.resultCode(HttpStatus.OK.value())
 					.resultMsg(HttpStatus.OK.name())
 					.build();
-		}
-		else{
+		} else {
 			throw new CustomException(CustomErrorCode.ALREADY_EXIST_USER);
 		}
 

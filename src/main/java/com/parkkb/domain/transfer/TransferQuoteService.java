@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@EnableFeignClients(basePackageClasses= ForexClient.class)
+@EnableFeignClients(basePackageClasses = ForexClient.class)
 public class TransferQuoteService {
 
 	private final QuoteService quoteService;
@@ -32,15 +32,16 @@ public class TransferQuoteService {
 		var totalAmount = BigDecimal.valueOf(quoteDto.amount() / forex.getBasePrice());
 		return TransferQuoteVo.builder()
 				.quoteVo(transferMapper.toQuoteVo(quoteService.createQuote(
-						transferMapper.toQuoteEntity(quoteDto, forex.getBasePrice(), calculateFee(quoteDto.targetCurrency(), totalAmount),
+						transferMapper.toQuoteEntity(quoteDto, forex.getBasePrice(),
+								calculateFee(quoteDto.targetCurrency(), totalAmount),
 								getUserId()))))
 				.resultCode(HttpStatus.OK.value())
 				.resultMsg(HttpStatus.OK.name())
 				.build();
 	}
 
-	private ForexRes getForex(String currencyCode){
-		return forexClient.getRecentForexRates("FRX.KRW"+currencyCode).get(0);
+	private ForexRes getForex(String currencyCode) {
+		return forexClient.getRecentForexRates("FRX.KRW" + currencyCode).get(0);
 	}
 
 	private BigDecimal calculateFee(String currency, BigDecimal amount) {
@@ -67,7 +68,7 @@ public class TransferQuoteService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userId = Strings.EMPTY;
 		if (authentication != null && authentication.isAuthenticated()) {
-			userId = (String) authentication.getPrincipal();
+			userId = (String)authentication.getPrincipal();
 		}
 
 		return userId;

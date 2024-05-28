@@ -7,7 +7,6 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -16,18 +15,18 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class JwtProvider{
+public class JwtProvider {
 
 	private static String secretKey;
 	private static long expirationMs;
 
 	@Value("${security.jwt.key}")
-	public void setSecretKey(String secretKey){
+	public void setSecretKey(String secretKey) {
 		JwtProvider.secretKey = secretKey;
 	}
 
 	@Value("${security.jwt.expirationMs}")
-	public void setExpirationMs(long expirationMs){
+	public void setExpirationMs(long expirationMs) {
 		JwtProvider.expirationMs = expirationMs;
 	}
 

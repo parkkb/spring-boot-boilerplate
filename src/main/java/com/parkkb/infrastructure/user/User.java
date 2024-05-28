@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Entity
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS")  //user라는 키워드는 이미 예약어여서 테이블명으로 사용할수 없음.
 public class User implements UserDetails {
 
@@ -56,7 +58,7 @@ public class User implements UserDetails {
 	}
 
 	@Override
-	public String getPassword(){
+	public String getPassword() {
 		return password;
 	}
 
@@ -81,7 +83,7 @@ public class User implements UserDetails {
 	}
 
 	@Builder
-	public User(String userId, String password, String name, String idType, String idValue, String token){
+	public User(String userId, String password, String name, String idType, String idValue, String token) {
 		this.userId = userId;
 		this.password = password;
 		this.name = name;

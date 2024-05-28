@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class HistoryListController {
 
 	@GetMapping("/transfer/history")
-	public String hello(){
+	public String hello() {
 
 		System.out.println("====2");
 		return "hello";

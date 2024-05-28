@@ -21,7 +21,7 @@ public class CustomErrorVo {
 	private String code;
 	private String message;
 
-	public static ResponseEntity<CustomErrorVo> toResponseEntity(CustomErrorCode e){
+	public static ResponseEntity<CustomErrorVo> toResponseEntity(CustomErrorCode e) {
 		return ResponseEntity
 				.status(e.getHttpStatus())
 				.body(CustomErrorVo.builder()
@@ -30,7 +30,7 @@ public class CustomErrorVo {
 						.build());
 	}
 
-	public static CustomErrorVo toResponse(CustomErrorCode e){
+	public static CustomErrorVo toResponse(CustomErrorCode e) {
 		return CustomErrorVo.builder()
 				.code(e.getCode())
 				.message(e.getMessage())

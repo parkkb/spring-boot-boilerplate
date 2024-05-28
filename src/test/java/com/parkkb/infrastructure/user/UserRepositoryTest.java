@@ -1,5 +1,7 @@
 package com.parkkb.infrastructure.user;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.parkkb.interfaces.user.enums.IdType;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest
 public class UserRepositoryTest {
 
@@ -20,11 +20,9 @@ public class UserRepositoryTest {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-
-
 	@Test
 	@DisplayName("회원가입 테스트")
-	public void saveUser(){
+	public void saveUser() {
 		String userId = "abc@gmail.com";
 		String password = "12345";
 		String name = "김철수";
@@ -32,11 +30,11 @@ public class UserRepositoryTest {
 		String idValue = "090225";
 
 		userRepository.save(User.builder()
-						.userId(userId)
-						.password(passwordEncoder.encode(password))
-						.name(name)
-						.idType(idType)
-						.idValue(idValue)
+				.userId(userId)
+				.password(passwordEncoder.encode(password))
+				.name(name)
+				.idType(idType)
+				.idValue(idValue)
 				.build());
 
 		List<User> userList = userRepository.findAll();
