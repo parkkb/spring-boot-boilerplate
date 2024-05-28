@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultVo{
+public class ResultVo {
 
 	private Integer resultCode;
 	private String resultMsg;

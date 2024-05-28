@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.parkkb.common.enums.CustomErrorCode;
 import com.parkkb.common.exception.CustomException;
+import com.parkkb.common.token.JwtProvider;
 import com.parkkb.infrastructure.user.UserService;
 import com.parkkb.interfaces.user.request.LoginDto;
-import com.parkkb.common.token.JwtProvider;
 import com.parkkb.interfaces.user.response.LoginResultVo;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class LogInService {
 	}
 
 	private void checkPassword(String password, String encryptedPassword) {
-		if(!passwordEncoder.matches(password, encryptedPassword)){
+		if (!passwordEncoder.matches(password, encryptedPassword)) {
 			throw new CustomException(CustomErrorCode.NOT_MATCHE_PASSWORD);
 		}
 	}

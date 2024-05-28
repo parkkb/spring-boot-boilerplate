@@ -11,7 +11,7 @@ import com.parkkb.common.response.CustomErrorVo;
 public class CustomExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
-	protected ResponseEntity<CustomErrorVo> handleCustomException(final CustomException ex){
+	protected ResponseEntity<CustomErrorVo> handleCustomException(final CustomException ex) {
 		return CustomErrorVo.toResponseEntity(ex.getCustomErrorCode());
 	}
 }

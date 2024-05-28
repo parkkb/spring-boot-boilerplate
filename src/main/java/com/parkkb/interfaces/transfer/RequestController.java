@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 public class RequestController {
 
 	@PostMapping("/transfer/request")
-	public ResultVo transferRequest(@RequestBody  RequestDto requestDto){
+	public ResultVo transferRequest(@RequestBody RequestDto requestDto) {
 
-		 System.out.println(requestDto);
+		System.out.println(requestDto);
 
 		return ResultVo.builder()
 				.resultCode(HttpStatus.OK.value())

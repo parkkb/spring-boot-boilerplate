@@ -24,7 +24,7 @@ spring:
 security:
   jwt:
     key: nuVFB5ftldMZpKvVEWAiJX8hKk+goqP2gcjOKWJXpyU=
-    expirationMs : 3600000
+    expirationMs: 3600000
   encryption:
     salt: 5c0744940b5c369b
 
