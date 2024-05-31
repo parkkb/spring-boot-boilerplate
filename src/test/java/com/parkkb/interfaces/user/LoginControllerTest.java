@@ -48,7 +48,7 @@ class LoginControllerTest {
 
 	@Test
 	void loginTest() throws Exception {
-		//given
+
 		setup();
 		LoginDto loginDto = new LoginDto("abc@gmail.com", "dsfjsdf");
 
