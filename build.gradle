@@ -1,16 +1,9 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.springframework.boot' version '3.3.0'
+    id 'io.spring.dependency-management' version '1.1.5'
 }
 
-group = 'com.parkkb'
-version = '0.0.1-SNAPSHOT'
-
-java {
-    sourceCompatibility = '17'
-}
 
 configurations {
     compileOnly {
@@ -18,50 +11,37 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
+
+subprojects {
+
+    group 'com.parkkb'
+    version '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
+
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    configurations {
+        compileOnly{
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 }
 
-ext {
-    set('snippetsDir', file("build/generated-snippets"))
+bootJar {
+    enabled = false
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-crypto:6.2.3'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-devtools'
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    implementation 'org.slf4j:jcl-over-slf4j:2.0.12'
-    // JWT 라이브러리
-    implementation 'io.jsonwebtoken:jjwt:0.12.5'
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation 'com.google.code.gson:gson:2.11.0'
-    compileOnly 'io.jsonwebtoken:jjwt-api:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
-    implementation 'javax.xml.bind:jaxb-api:2.3.1'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
-    // https://mvnrepository.com/artifact/org.mockito/mockito-core
-    testImplementation 'org.mockito:mockito-core:5.12.0'
+jar{
+    enabled = true
 }
 
-tasks.named('test') {
-    outputs.dir snippetsDir
+test {
     useJUnitPlatform()
-}
-
-tasks.named('asciidoctor') {
-    inputs.dir snippetsDir
-    dependsOn test
 }
