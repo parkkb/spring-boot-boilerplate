@@ -1,9 +1,11 @@
 package com.parkkb.common.context;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Getter
 @Component
 public class EncryptionContext {
 	private final String salt;
@@ -14,11 +16,4 @@ public class EncryptionContext {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	public String getSalt() {
-		return salt;
-	}
-
-	public PasswordEncoder getPasswordEncoder() {
-		return passwordEncoder;
-	}
 }
