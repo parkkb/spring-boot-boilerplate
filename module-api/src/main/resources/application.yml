@@ -11,7 +11,7 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:themoin
+    url: jdbc:h2:tcp://localhost/~/test
     username: sa
     password: 1234
 
@@ -19,7 +19,9 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        ddl-auto: create
         format_sql: true
+    generate-ddl: true
 
 security:
   jwt:

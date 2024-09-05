@@ -31,3 +31,8 @@
   - SprintBootTest를 통해서 테스트 가능.
 - test 시 local 환경에서는 h2 테이블을 이용해서 테스트
 - ci 환경에서 controller와 service는 테스트 불가.
+
+## Module
+module-api : api 모듈
+
+module-batch : batch 모듈
