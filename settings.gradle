@@ -1,4 +1,4 @@
 rootProject.name = 'spring-boot-boilerplate'
-include 'module-api'
-include 'module-batch'
+include 'api-module'
+include 'batch-module'
 
